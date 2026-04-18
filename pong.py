@@ -23,6 +23,7 @@ class Player(GameSprite):
         self.rect = self.image.get_rect()
         self.rect.x = xpos
         self.rect.y = ypos
+        self.points = 0
 
     def move_l(self, keys):
         if keys[K_w] and self.rect.y > 10:
@@ -64,10 +65,13 @@ class Ball(sprite.Sprite):
         else:
             self.sp_y -= s     
         
-        
+font.init()
+
+fon = font.SysFont('Arial', 30, True)
+
 
 left_pl = Player('Безымянный.png', 25, 10, 15, 80, 10, (255, 255, 255))
-right_pl = Player('Безымянный.png', 1040, 10, 15, 80, 10, (255, 255, 255))
+right_pl = Player('Безымянный.png', 1040, 10, 15, 80, 10, (255, 255, 255)) 
 back = Player('Безымянный.png', 0, 0, 1080, 720, 0, (0, 0, 0))
 ball = Ball('ball.png', 520, 340, 40, 40, 3, 3)
 
@@ -85,6 +89,8 @@ while game:
     keys = key.get_pressed()
 
     back.reset()
+    win.blit(fon.render(str(left_pl.points), False, (255, 255, 255)), (500, 20))
+    win.blit(fon.render(str(right_pl.points), False, (255, 255, 255)), (560, 20))
     left_pl.reset()
     left_pl.move_l(keys)
 
@@ -101,11 +107,13 @@ while game:
         ball.sp_x *= -1
         ball.speed_up(0.3)
     if ball.rect.x < -30:
+        right_pl.points += 1
         ball.rect.x = 520
         ball.rect.y = 340
         ball.sp_x = 3
         ball.sp_y = 3
     if ball.rect.x > 1070:
+        left_pl.points += 1
         ball.rect.x = 520
         ball.rect.y = 340
         ball.sp_x = -3
